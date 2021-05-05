@@ -1,23 +1,67 @@
+import { useState } from 'react'
 import classes from './contact-form.module.css'
 
 const ContactForm = () => {
+	const [enteredEmail, setEnteredEmail] = useState()
+	const [enteredName, setEnteredName] = useState()
+	const [enteredMessage, setEnteredMessage] = useState()
+	const sendMessageHandler = (e) => {
+		e.preventDefault()
+
+		fetch('/api/contact', {
+			method: 'POST',
+			body: JSON.stringify({
+				email: enteredEmail,
+				name: enteredName,
+				message: enteredMessage,
+			}),
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		}).then((response) => {
+			if (response.ok) {
+				setEnteredEmail('')
+				setEnteredMessage('')
+				setEnteredName('')
+			}
+		})
+	}
 	return (
 		<section className={classes.contact}>
 			<h1>How Can I Help You ?</h1>
-			<form className={classes.form}>
+			<form className={classes.form} onSubmit={sendMessageHandler}>
 				<div className={classes.controls}>
 					<div className={classes.control}>
 						<label htmlFor='email'>Your Email</label>
-						<input type='email' id='email' required />
+						<input
+							type='email'
+							id='email'
+							required
+							value={enteredEmail}
+							onChange={(e) => setEnteredEmail(e.target.value)}
+						/>
 					</div>
 					<div className={classes.control}>
 						<label htmlFor='name'>Your Name</label>
-						<input type='text' id='name' required />
+						<input
+							type='text'
+							id='name'
+							required
+							value={enteredName}
+							onChange={(e) => setEnteredName(e.target.value)}
+						/>
 					</div>
 				</div>
 				<div className={classes.control}>
 					<label htmlFor='message'>Your Message</label>
-					<textarea id='message' rows='6'></textarea>
+					<textarea
+						id='message'
+						rows='6'
+						required
+						value={enteredMessage}
+						onChange={(e) =>
+							setEnteredMessage(e.target.value)
+						}></textarea>
 				</div>
 				<div className={classes.actions}>
 					<button>Send Message</button>
