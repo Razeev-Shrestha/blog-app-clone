@@ -1,7 +1,4 @@
 import { MongoClient } from 'mongodb'
-// import dotenv from 'dotenv'
-
-// dotenv.config()
 
 const contactHandler = async (req, res) => {
 	if (req.method === 'POST') {
@@ -24,14 +21,11 @@ const contactHandler = async (req, res) => {
 		}
 		let client
 		const connectionString = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_CLUSTER}.4clyz.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`
-		// const connectionString =
-		// 	'mongodb+srv://mongodb:mongodb123@cluster0.4clyz.mongodb.net/blog-clone-app?retryWrites=true&w=majority'
 
 		try {
 			client = await MongoClient.connect(connectionString, {
 				useUnifiedTopology: true,
 			})
-			console.log(' Databse successfully connected')
 		} catch (error) {
 			console.log(error, 'Could not Connect To The Database')
 			res.status(500).json({
